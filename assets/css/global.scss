@@ -1,0 +1,21 @@
+.icon {
+  width: 1.1rem !important;
+  height: 1.1rem !important;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.btn {
+  border-radius: 0.8rem;
+}
+
+.v-toast {
+  &__item {
+    min-height: auto !important;
+  }
+  &__text {
+    padding: 0.7rem 1rem !important;
+  }
+}
