@@ -1,0 +1,2 @@
+# nuxt-firebase
+nuxt-firebase
