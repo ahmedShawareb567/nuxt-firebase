@@ -7,7 +7,8 @@ export const mutations = {};
 export const actions = {
   async nuxtServerInit({ commit, getters, dispatch }, { app, redirect }) {
     try {
-      dispatch("auth/me");
+      const token = app.$cookies.get("token");
+      if (token) await dispatch("auth/me", token);
     } catch (e) {
       console.log(e);
     }

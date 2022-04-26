@@ -4,7 +4,9 @@
     nuxt
 </template>
 <script>
-export default {};
+export default {
+  name: "default",
+};
 </script>
 <style lang="scss">
 .theApp {

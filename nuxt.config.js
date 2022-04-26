@@ -22,13 +22,14 @@ export default {
     MESSAGING_SENDER_ID: process.env.MESSAGING_SENDER_ID,
     APP_ID: process.env.APP_ID,
     MEASUREMENT_ID: process.env.MEASUREMENT_ID,
+    DATABASE_URL: process.env.DATABASE_URL,
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ["~assets/css/global.scss"],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: ["~/plugins/firebase.client.js", "~/plugins/toast.client.js"],
+  plugins: ["~/plugins/firebase.js", "~/plugins/toast.client.js"],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
@@ -45,31 +46,6 @@ export default {
     "bootstrap-vue/nuxt",
     "cookie-universal-nuxt",
     "@nuxtjs/svg-sprite",
-
-    [
-      "@nuxtjs/firebase",
-      {
-        config: {
-          // REQUIRED: Official config for firebase.initializeApp(config):
-          apiKey: process.env.API_KEY,
-          authDomain: process.env.AUTH_DOMAIN,
-          projectId: process.env.PROJECT_ID,
-          storageBucket: process.env.STORAGE_BUCKET,
-          messagingSenderId: process.env.MESSAGING_SENDER_ID,
-          appId: process.env.APP_ID,
-          measurementId: process.env.MEASUREMENT_ID,
-        },
-        services: {
-          persistence: "local",
-          initialize: {
-            onAuthStateChangedMutation: "ON_AUTH_STATE_CHANGED_MUTATION",
-            onAuthStateChangedAction: "onAuthStateChangedAction",
-            subscribeManually: false,
-          },
-          ssr: false,
-        },
-      },
-    ],
   ],
   svgSprite: {
     input: "~/assets/icons/svg",

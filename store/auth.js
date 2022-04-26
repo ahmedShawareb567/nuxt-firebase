@@ -1,8 +1,4 @@
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  verifyIdToken,
-} from "firebase/auth";
+import jwt_decode from "jwt-decode";
 
 const trimError = (error) => {
   return error.split("/")[1].replaceAll("-", " ");
@@ -30,14 +26,18 @@ export const mutations = {
 export const actions = {
   async register({ commit }, payload) {
     try {
-      const { user } = await createUserWithEmailAndPassword(
-        this.app.$fire.auth,
+      const { user } = await this.app.$fire.auth.createUserWithEmailAndPassword(
         payload.email,
         payload.password
       );
       if (user) {
         commit("SET_USER", user);
         commit("SET_TOKEN", user.accessToken);
+        this.app.$cookies.set("token", user.accessToken);
+
+        this.app.$fire.auth.sendEmailVerification(
+          this.app.$fire.auth.currentUser
+        );
         return {
           success: true,
           message: "Register successfully",
@@ -53,14 +53,17 @@ export const actions = {
 
   async login({ commit }, payload) {
     try {
-      const { user } = await signInWithEmailAndPassword(
-        this.app.$fire.auth,
+      const { user } = await this.app.$fire.auth.signInWithEmailAndPassword(
         payload.email,
         payload.password
       );
       if (user) {
         commit("SET_USER", user);
-        commit("SET_TOKEN", user.accessToken);
+        const token = await this.$fire.auth.currentUser.getIdToken();
+
+        commit("SET_TOKEN", token);
+
+        this.app.$cookies.set("token", token);
 
         return {
           success: true,
@@ -75,14 +78,20 @@ export const actions = {
     }
   },
 
-  async logout({ commit }) {},
-
-  async me({ commit }) {
+  logout({ commit }) {
     try {
-      this.app.$fire.auth.onAuthStateChanged((user) => {
-        commit("SET_USER", user);
-        commit("SET_TOKEN", user.accessToken);
-      });
+      this.app.$fire.auth.signOut();
+      commit("SET_USER", null);
+      commit("SET_TOKEN", null);
+    } catch (e) {
+      console.log(e);
+    }
+  },
+
+  async me({ commit }, payload) {
+    try {
+      const decoded = jwt_decode(payload);
+      commit("SET_USER", decoded);
     } catch (e) {
       return {
         success: false,

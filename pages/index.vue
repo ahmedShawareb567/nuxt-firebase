@@ -5,7 +5,7 @@
       .col-12.text-center
         .mb-5
           img(src="https://www.gstatic.com/mobilesdk/160503_mobilesdk/logo/2x/firebase_28dp.png" alt="firebase")
-          h2 Firebase 🧠
+          h2 Firebase 🍉
         p {{user}}
   .logout
     button.btn.btn-outline-danger(v-if="isAuth" @click="logout()") LogOut #[span.pl-2: svgIcon(name="logout")]
@@ -26,6 +26,7 @@ export default {
   },
   methods: {
     logout() {
+      this.$store.dispatch("auth/logout");
       this.$cookies.remove("token");
       this.$router.push("/login");
     },
